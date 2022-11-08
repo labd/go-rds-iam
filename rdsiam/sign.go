@@ -12,10 +12,10 @@ import (
 )
 
 type DSN struct {
-	host     string
-	port     int
-	user     string
-	database string
+	host   string
+	port   int
+	user   string
+	dbname string
 }
 
 func createNewDSN(ctx context.Context, dsnString string) (string, error) {
@@ -32,7 +32,7 @@ func createNewDSN(ctx context.Context, dsnString string) (string, error) {
 	result := fmt.Sprintf(
 		"user=%s dbname=%s sslmode=require host=%s port=%d password=%s",
 		dsn.user,
-		dsn.database,
+		dsn.dbname,
 		dsn.host,
 		dsn.port,
 		token)
@@ -81,10 +81,10 @@ func parseDSN(dsn string) (*DSN, error) {
 			result.user = userInfo.Username
 		}
 	}
-	if val, ok := options["database"]; ok {
-		result.database = val
+	if val, ok := options["dbname"]; ok {
+		result.dbname = val
 	} else {
-		result.database = result.user
+		result.dbname = result.user
 	}
 	return result, nil
 }
