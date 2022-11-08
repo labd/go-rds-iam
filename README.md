@@ -29,7 +29,7 @@ func main() {
 		panic(err)
 	}
 
-	db, err := sql.Open("postgresql:rdsiam", dsn.DSN)
+	db, err := sql.Open("postgresql-rdsiam", dsn.DSN)
 	if err != nil {
 		panic(err)
 	}

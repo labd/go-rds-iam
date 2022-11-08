@@ -14,7 +14,7 @@ type Driver struct {
 }
 
 func init() {
-	sql.Register("postgresql:rdsiam", &Driver{
+	sql.Register("postgresql-rdsiam", &Driver{
 		wd: pq.Driver{},
 	})
 }
