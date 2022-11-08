@@ -35,7 +35,7 @@ func init() {
 }
 
 func main() {
-	dsn, err := dburl.Parse("postgresql-rdsiam://iam-role@rds-server/my-database")
+	db, err := dburl.Open("postgresql-rdsiam://iam-role@rds-server/my-database")
 	if err != nil {
 		panic(err)
 	}
