@@ -3,12 +3,16 @@ package rdsiam
 import (
 	"context"
 	"fmt"
-	"os"
 	"os/user"
+	"regexp"
 	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/rds/auth"
+)
+
+var (
+	reRegion = regexp.MustCompilePOSIX(`\.([^\.]+)\.rds\.amazonaws\.com$`)
 )
 
 type DSN struct {
@@ -46,9 +50,18 @@ func GetToken(ctx context.Context, dsn *DSN) (string, error) {
 	}
 
 	endpoint := fmt.Sprintf("%s:%d", dsn.host, dsn.port)
-	region := os.Getenv("AWS_REGION")
+	region := extractRegion(dsn.host)
 	return auth.BuildAuthToken(
 		ctx, endpoint, region, dsn.user, cfg.Credentials)
+}
+
+func extractRegion(hostname string) string {
+	matches := reRegion.FindStringSubmatch(hostname)
+	if len(matches) > 1 {
+		return matches[1]
+	}
+	return ""
+
 }
 
 func parseDSN(dsn string) (*DSN, error) {
